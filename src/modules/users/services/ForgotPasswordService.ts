@@ -6,7 +6,7 @@ import path from 'path';
 import IUserHashProvider from '../containers/providers/UserHashProvider/models/IUserHashProvider';
 import IForgotPasswordDTO from '../dtos/IForgotPasswordDTO';
 import IUsersRepository from '../repositories/models/IUsersRepository';
-import ISessionsRepository from '../repositories/models/IForgotPasswordSessionsRepository';
+import IForgotPasswordSessionsRepository from '../repositories/models/IForgotPasswordSessionsRepository';
 import { UserStatus } from '../entities/User';
 
 @injectable()
@@ -18,8 +18,8 @@ export default class ForgotPasswordService {
     private mailProvider: IMailProvider,
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
-    @inject('SessionsRepository')
-    private sessionsRepository: ISessionsRepository,
+    @inject('ForgotPasswordSessionsRepository')
+    private forgotPasswordSessionsRepository: IForgotPasswordSessionsRepository,
   ) {}
 
   public async execute({ email }: IForgotPasswordDTO): Promise<void> {
@@ -47,7 +47,7 @@ export default class ForgotPasswordService {
     const validationDate = new Date();
     validationDate.setHours(validationDate.getHours() + 2);
 
-    await this.sessionsRepository.create({
+    await this.forgotPasswordSessionsRepository.create({
       userId: userByEmail.id,
       validationDate,
     });

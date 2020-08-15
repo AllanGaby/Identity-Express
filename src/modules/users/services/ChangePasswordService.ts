@@ -3,7 +3,7 @@ import { injectable, inject } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
 import IHashProvider from '@shared/containers/providers/HashProvider/models/IHashProvider';
 import IChangePasswordDTO from '../dtos/IChangePasswordDTO';
-import ISessionsRepository from '../repositories/models/IForgotPasswordSessionsRepository';
+import IForgotPasswordSessionsRepository from '../repositories/models/IForgotPasswordSessionsRepository';
 import IUsersRepository from '../repositories/models/IUsersRepository';
 import IUserHashProvider from '../containers/providers/UserHashProvider/models/IUserHashProvider';
 import User, { UserStatus } from '../entities/User';
@@ -17,15 +17,17 @@ export default class ChangePasswordService {
     private hashProvider: IHashProvider,
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
-    @inject('SessionsRepository')
-    private sessionsRepository: ISessionsRepository,
+    @inject('ForgotPasswordSessionsRepository')
+    private forgotPasswordSessionsRepository: IForgotPasswordSessionsRepository,
   ) {}
 
   public async execute({
     password: newPassword,
     token,
   }: IChangePasswordDTO): Promise<User> {
-    const sessionById = await this.sessionsRepository.findById(token);
+    const sessionById = await this.forgotPasswordSessionsRepository.findById(
+      token,
+    );
     if (!sessionById) {
       throw new AppError('Session not found', 404);
     }
