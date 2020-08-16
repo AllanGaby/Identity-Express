@@ -11,7 +11,7 @@ usersRoutes.use('/password', PasswordRoutes);
 usersRoutes.get('/', usersController.list);
 usersRoutes.get('/:id', usersController.show);
 usersRoutes.post('/', usersController.create);
-usersRoutes.patch('/:id/activate', activateController.activate);
+usersRoutes.patch('/:id/activate', activateController.update);
 usersRoutes.put('/:id', usersController.update);
 
 export default usersRoutes;

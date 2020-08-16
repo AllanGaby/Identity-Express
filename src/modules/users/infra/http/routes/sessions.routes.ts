@@ -1,16 +1,9 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+import LoginController from '../controllers/LoginController';
 
 const sessionsRoutes = Router();
+const loginController = new LoginController();
 
-sessionsRoutes.post('/', (request: Request, response: Response) => {
-  response.json({
-    message: 'Login',
-  });
-});
-sessionsRoutes.delete('/', (request: Request, response: Response) => {
-  response.json({
-    message: 'Logout',
-  });
-});
+sessionsRoutes.post('/', loginController.create);
 
 export default sessionsRoutes;
