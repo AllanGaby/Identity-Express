@@ -53,6 +53,7 @@ export default class CreateUserService {
     });
     delete user.password;
     delete user.hash;
+    delete user.extentionAvatar;
     return user;
   }
 }

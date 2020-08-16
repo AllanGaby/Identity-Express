@@ -61,6 +61,7 @@ export default class AuthenticateUserService {
 
     delete userByEmail.password;
     delete userByEmail.hash;
+    delete userByEmail.extentionAvatar;
     return {
       token,
       user: userByEmail,

@@ -5,7 +5,7 @@ import IHashProvider from '@shared/containers/providers/HashProvider/models/IHas
 import IMailProvider from '@shared/containers/providers/MailProvider/models/IMailProvider';
 import IStorageProvider from '@shared/containers/providers/StorageProvider/models/IStorageProvider';
 import path from 'path';
-import fs from 'fs';
+import uploadConfig from '@config/upload';
 import IUserHashProvider from '../containers/providers/UserHashProvider/models/IUserHashProvider';
 import User, { UserStatus } from '../entities/User';
 import ICreateUserDTO from '../dtos/ICreateUserDTO';
@@ -48,20 +48,28 @@ export default class CreateUserService {
       status,
       password: passwordHash,
     });
+    const extentionAvatar = temporaryAvatarPath
+      ? path.extname(temporaryAvatarPath)
+      : undefined;
+
     const user = await this.usersRepository.create({
       name,
       email,
       password: passwordHash,
       hash,
       status,
+      extentionAvatar,
     });
 
     if (temporaryAvatarPath) {
+      const sourceFilePath = path.resolve(
+        uploadConfig.temporaryDir,
+        temporaryAvatarPath,
+      );
       await this.storageProvider.saveFile({
-        sourceFilePath: temporaryAvatarPath,
-        destinationFile: user.id,
+        sourceFilePath,
+        destinationFile: `${user.id}${user.extentionAvatar}`,
       });
-      await fs.promises.unlink(temporaryAvatarPath);
     }
 
     const templateFilePath = path.resolve(
@@ -87,6 +95,7 @@ export default class CreateUserService {
 
     delete user.password;
     delete user.hash;
+    delete user.extentionAvatar;
     return user;
   }
 }

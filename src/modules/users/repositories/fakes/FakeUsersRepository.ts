@@ -6,15 +6,33 @@ export default class FakeUsersRepository implements IUsersRepository {
   private users: User[] = [];
 
   public async findById(id: string): Promise<User | undefined> {
-    return this.users.find(user => user.id === id);
+    const userById = this.users.find(user => user.id === id);
+    if (userById) {
+      return {
+        ...userById,
+      };
+    }
+    return undefined;
   }
 
   public async findByName(name: string): Promise<User | undefined> {
-    return this.users.find(user => user.name === name);
+    const userByName = this.users.find(user => user.name === name);
+    if (userByName) {
+      return {
+        ...userByName,
+      };
+    }
+    return undefined;
   }
 
   public async findByEmail(email: string): Promise<User | undefined> {
-    return this.users.find(user => user.email === email);
+    const userByEmail = this.users.find(user => user.email === email);
+    if (userByEmail) {
+      return {
+        ...userByEmail,
+      };
+    }
+    return undefined;
   }
 
   public async findAll(): Promise<User[]> {

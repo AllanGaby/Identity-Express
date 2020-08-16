@@ -1,8 +1,9 @@
-import fs from 'fs';
 import AppError from '@shared/errors/AppError';
 import FakeHashProvider from '@shared/containers/providers/HashProvider/fakes/FakeHashProvider';
 import FakeMailProvider from '@shared/containers/providers/MailProvider/fakes/FakeMailProvider';
 import FakeStorageProvider from '@shared/containers/providers/StorageProvider/fakes/FakeStorageProvider';
+import path from 'path';
+import uploadConfig from '@config/upload';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import UserHashProvider from '../containers/providers/UserHashProvider/implementations/UserHashProvider';
 import CreateUserService from './CreateUserService';
@@ -54,7 +55,6 @@ describe('CreateUser', () => {
   it('should be able create a new user and upload file', async () => {
     const onSendMail = jest.spyOn(mailProvider, 'sendMail');
     const onSaveFile = jest.spyOn(storageProvider, 'saveFile');
-    jest.spyOn(fs.promises, 'unlink').mockImplementationOnce(async path => {});
     const name = 'New User Name';
     const email = 'newuser@identity.com';
     const avatarFile = 'newuser.jpg';
@@ -64,6 +64,8 @@ describe('CreateUser', () => {
       password: '123456',
       temporaryAvatarPath: avatarFile,
     });
+    const sourceFilePath = path.resolve(uploadConfig.temporaryDir, avatarFile);
+
     expect(user).toHaveProperty('name');
     expect(user.name).toEqual(name);
     expect(user).toHaveProperty('email');
@@ -74,8 +76,8 @@ describe('CreateUser', () => {
     expect(user).not.toHaveProperty('hash');
     expect(onSendMail).toHaveBeenCalledTimes(1);
     expect(onSaveFile).toHaveBeenCalledWith({
-      sourceFilePath: avatarFile,
-      destinationFile: user.id,
+      sourceFilePath,
+      destinationFile: `${user.id}.jpg`,
     });
   });
 

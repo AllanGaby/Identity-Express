@@ -72,6 +72,7 @@ export default class ChangePasswordService {
     });
     delete updatedUser.password;
     delete updatedUser.hash;
+    delete updatedUser.extentionAvatar;
     return updatedUser;
   }
 }

@@ -6,6 +6,7 @@ import IMailProvider from '@shared/containers/providers/MailProvider/models/IMai
 import IStorageProvider from '@shared/containers/providers/StorageProvider/models/IStorageProvider';
 import path from 'path';
 import fs from 'fs';
+import uploadConfig from '@config/upload';
 import IUserHashProvider from '../containers/providers/UserHashProvider/models/IUserHashProvider';
 import User from '../entities/User';
 import IUpdateUserDTO from '../dtos/IUpdateUserDTO';
@@ -78,6 +79,9 @@ export default class UpdateUserService {
       status,
       password: passwordHash,
     });
+    const extentionAvatar = temporaryAvatarPath
+      ? path.extname(temporaryAvatarPath)
+      : undefined;
     const user = await this.usersRepository.update({
       id,
       name: nameToUpdate,
@@ -85,6 +89,7 @@ export default class UpdateUserService {
       password: passwordHash,
       hash: newHash,
       status,
+      extentionAvatar,
     });
 
     if (updateEmail) {
@@ -113,19 +118,24 @@ export default class UpdateUserService {
     }
 
     if (temporaryAvatarPath) {
-      const fileExists = await this.storageProvider.fileExists(id);
+      const sourceFilePath = path.resolve(
+        uploadConfig.temporaryDir,
+        temporaryAvatarPath,
+      );
+      const destinationFile = `${user.id}${user.extentionAvatar}`;
+      const fileExists = await this.storageProvider.fileExists(destinationFile);
       if (fileExists) {
-        await this.storageProvider.deleteFile(id);
+        await this.storageProvider.deleteFile(destinationFile);
       }
       await this.storageProvider.saveFile({
-        sourceFilePath: temporaryAvatarPath,
-        destinationFile: user.id,
+        sourceFilePath,
+        destinationFile,
       });
-      await fs.promises.unlink(temporaryAvatarPath);
     }
 
     delete user.password;
     delete user.hash;
+    delete user.extentionAvatar;
     return user;
   }
 }

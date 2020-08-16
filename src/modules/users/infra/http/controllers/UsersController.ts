@@ -9,11 +9,16 @@ import ShowUserService from '@modules/users/services/ShowUserService';
 export default class UsersController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { name, email, password } = request.body;
+    let temporaryAvatarPath = '';
+    if (request.file) {
+      temporaryAvatarPath = request.file.filename;
+    }
     const createUser = container.resolve(CreateUserService);
     const user = await createUser.execute({
       name,
       email,
       password,
+      temporaryAvatarPath,
     });
     return response.status(201).json(user);
   }
@@ -22,11 +27,16 @@ export default class UsersController {
     const updateUser = container.resolve(UpdateUserService);
     const { name, email, password } = request.body;
     const { id } = request.params;
+    let temporaryAvatarPath = '';
+    if (request.file) {
+      temporaryAvatarPath = request.file.filename;
+    }
     const user = await updateUser.execute({
       id,
       name,
       email,
       password,
+      temporaryAvatarPath,
     });
     return response.json(user);
   }

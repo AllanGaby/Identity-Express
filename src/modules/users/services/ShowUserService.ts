@@ -15,6 +15,7 @@ export default class ListUsersService {
     const user = await this.usersRepository.findById(userId);
     delete user?.hash;
     delete user?.password;
+    delete user?.extentionAvatar;
     return user;
   }
 }

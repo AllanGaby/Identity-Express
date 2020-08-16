@@ -3,6 +3,8 @@ import AppError from '@shared/errors/AppError';
 import FakeHashProvider from '@shared/containers/providers/HashProvider/fakes/FakeHashProvider';
 import FakeMailProvider from '@shared/containers/providers/MailProvider/fakes/FakeMailProvider';
 import FakeStorageProvider from '@shared/containers/providers/StorageProvider/fakes/FakeStorageProvider';
+import path from 'path';
+import uploadConfig from '@config/upload';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import UserHashProvider from '../containers/providers/UserHashProvider/implementations/UserHashProvider';
 import UpdateUserService from './UpdateUserService';
@@ -111,15 +113,16 @@ describe('UpdateUser', () => {
     const onFileExists = jest.spyOn(storageProvider, 'fileExists');
     const onDeleteFile = jest.spyOn(storageProvider, 'deleteFile');
     const onSaveFile = jest.spyOn(storageProvider, 'saveFile');
-    jest.spyOn(fs.promises, 'unlink').mockImplementationOnce(async path => {});
+    const avatarFile = 'New File.jpg';
     await storageProvider.saveFile({
-      destinationFile: createdUser.id,
-      sourceFilePath: createdUser.id,
+      destinationFile: `${createdUser.id}.jpg`,
+      sourceFilePath: `${createdUser.id}.jpg`,
     });
     const user = await updateUser.execute({
       id: createdUser.id,
-      temporaryAvatarPath: 'New File.jpg',
+      temporaryAvatarPath: avatarFile,
     });
+    const sourceFilePath = path.resolve(uploadConfig.temporaryDir, avatarFile);
     expect(user).toHaveProperty('name');
     expect(user.name).toEqual(createdUser.name);
     expect(user).toHaveProperty('email');
@@ -129,7 +132,10 @@ describe('UpdateUser', () => {
     expect(onSendMail).not.toHaveBeenCalled();
     expect(onFileExists).toHaveBeenCalled();
     expect(onDeleteFile).toHaveBeenCalled();
-    expect(onSaveFile).toHaveBeenCalled();
+    expect(onSaveFile).toHaveBeenCalledWith({
+      sourceFilePath,
+      destinationFile: `${user.id}.jpg`,
+    });
   });
 
   it('should be able update user and upload a new file', async () => {
@@ -142,11 +148,12 @@ describe('UpdateUser', () => {
     const onFileExists = jest.spyOn(storageProvider, 'fileExists');
     const onDeleteFile = jest.spyOn(storageProvider, 'deleteFile');
     const onSaveFile = jest.spyOn(storageProvider, 'saveFile');
-    jest.spyOn(fs.promises, 'unlink').mockImplementationOnce(async path => {});
+    const avatarFile = 'New File.jpg';
     const user = await updateUser.execute({
       id: createdUser.id,
-      temporaryAvatarPath: 'New File.jpg',
+      temporaryAvatarPath: avatarFile,
     });
+    const sourceFilePath = path.resolve(uploadConfig.temporaryDir, avatarFile);
     expect(user).toHaveProperty('name');
     expect(user.name).toEqual(createdUser.name);
     expect(user).toHaveProperty('email');
@@ -156,7 +163,10 @@ describe('UpdateUser', () => {
     expect(onSendMail).not.toHaveBeenCalled();
     expect(onFileExists).toHaveBeenCalled();
     expect(onDeleteFile).not.toHaveBeenCalled();
-    expect(onSaveFile).toHaveBeenCalled();
+    expect(onSaveFile).toHaveBeenCalledWith({
+      sourceFilePath,
+      destinationFile: `${user.id}.jpg`,
+    });
   });
 
   it('should not be able update a non-exists user', async () => {

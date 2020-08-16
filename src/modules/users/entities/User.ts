@@ -14,5 +14,7 @@ export default class User {
 
   hash: string;
 
+  extentionAvatar?: string;
+
   status: UserStatus;
 }
