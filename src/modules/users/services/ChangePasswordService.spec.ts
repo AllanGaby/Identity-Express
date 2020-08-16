@@ -2,12 +2,12 @@ import AppError from '@shared/errors/AppError';
 import FakeHashProvider from '@shared/containers/providers/HashProvider/fakes/FakeHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import FakeSessionsRepository from '../repositories/fakes/FakeSessionsRepository';
-import FakeUserHashProvider from '../containers/providers/UserHashProvider/fakes/FakeUserHashProvider';
+import UserHashProvider from '../containers/providers/UserHashProvider/implementations/UserHashProvider';
 import ChangePasswordService from './ChangePasswordService';
 import User, { UserStatus } from '../entities/User';
 import Session from '../entities/ForgotPasswordSession';
 
-let userHashProvider: FakeUserHashProvider;
+let userHashProvider: UserHashProvider;
 let hashProvider: FakeHashProvider;
 let usersRepository: FakeUsersRepository;
 let sessionsRepository: FakeSessionsRepository;
@@ -18,8 +18,8 @@ let validationDate: Date;
 
 describe('ChangePassword', () => {
   beforeEach(async () => {
-    userHashProvider = new FakeUserHashProvider();
     hashProvider = new FakeHashProvider();
+    userHashProvider = new UserHashProvider(hashProvider);
     usersRepository = new FakeUsersRepository();
     sessionsRepository = new FakeSessionsRepository();
     changePassword = new ChangePasswordService(

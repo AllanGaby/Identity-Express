@@ -1,15 +1,18 @@
 import AppError from '@shared/errors/AppError';
+import FakeHashProvider from '@shared/containers/providers/HashProvider/fakes/FakeHashProvider';
 import { UserStatus } from '../entities/User';
 import ActivateUserService from './ActivateUserService';
-import FakeUserHashProvider from '../containers/providers/UserHashProvider/fakes/FakeUserHashProvider';
+import UserHashProvider from '../containers/providers/UserHashProvider/implementations/UserHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 
-let userHashProvider: FakeUserHashProvider;
+let hashProvider: FakeHashProvider;
+let userHashProvider: UserHashProvider;
 let usersRepository: FakeUsersRepository;
 let activateUser: ActivateUserService;
 describe('ActivateUser', () => {
   beforeEach(() => {
-    userHashProvider = new FakeUserHashProvider();
+    hashProvider = new FakeHashProvider();
+    userHashProvider = new UserHashProvider(hashProvider);
     usersRepository = new FakeUsersRepository();
     activateUser = new ActivateUserService(userHashProvider, usersRepository);
   });

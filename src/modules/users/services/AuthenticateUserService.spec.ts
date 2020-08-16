@@ -3,19 +3,19 @@ import FakeHashProvider from '@shared/containers/providers/HashProvider/fakes/Fa
 import { UserStatus } from '../entities/User';
 import AuthenticateUserService from './AuthenticateUserService';
 import FakeTokenProvider from '../containers/providers/TokenProvider/fakes/FakeTokenProvider';
-import FakeUserHashProvider from '../containers/providers/UserHashProvider/fakes/FakeUserHashProvider';
+import UserHashProvider from '../containers/providers/UserHashProvider/implementations/UserHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 
-let userHashProvider: FakeUserHashProvider;
+let userHashProvider: UserHashProvider;
 let tokenProvider: FakeTokenProvider;
 let hashProvider: FakeHashProvider;
 let usersRepository: FakeUsersRepository;
 let authenticateUser: AuthenticateUserService;
 describe('AuthenticateUser', () => {
   beforeEach(() => {
-    userHashProvider = new FakeUserHashProvider();
-    tokenProvider = new FakeTokenProvider();
     hashProvider = new FakeHashProvider();
+    userHashProvider = new UserHashProvider(hashProvider);
+    tokenProvider = new FakeTokenProvider();
     usersRepository = new FakeUsersRepository();
     authenticateUser = new AuthenticateUserService(
       userHashProvider,

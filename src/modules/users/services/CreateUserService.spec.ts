@@ -4,11 +4,11 @@ import FakeHashProvider from '@shared/containers/providers/HashProvider/fakes/Fa
 import FakeMailProvider from '@shared/containers/providers/MailProvider/fakes/FakeMailProvider';
 import FakeStorageProvider from '@shared/containers/providers/StorageProvider/fakes/FakeStorageProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
-import FakeUserHashProvider from '../containers/providers/UserHashProvider/fakes/FakeUserHashProvider';
+import UserHashProvider from '../containers/providers/UserHashProvider/implementations/UserHashProvider';
 import CreateUserService from './CreateUserService';
 import { UserStatus } from '../entities/User';
 
-let userHashProvider: FakeUserHashProvider;
+let userHashProvider: UserHashProvider;
 let mailProvider: FakeMailProvider;
 let hashProvider: FakeHashProvider;
 let storageProvider: FakeStorageProvider;
@@ -17,9 +17,9 @@ let createUser: CreateUserService;
 
 describe('CreateUser', () => {
   beforeEach(() => {
-    userHashProvider = new FakeUserHashProvider();
-    mailProvider = new FakeMailProvider();
     hashProvider = new FakeHashProvider();
+    userHashProvider = new UserHashProvider(hashProvider);
+    mailProvider = new FakeMailProvider();
     storageProvider = new FakeStorageProvider();
     usersRepository = new FakeUsersRepository();
     createUser = new CreateUserService(

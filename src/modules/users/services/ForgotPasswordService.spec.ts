@@ -1,12 +1,14 @@
 import AppError from '@shared/errors/AppError';
 import FakeMailProvider from '@shared/containers/providers/MailProvider/fakes/FakeMailProvider';
+import FakeHashProvider from '@shared/containers/providers/HashProvider/fakes/FakeHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import FakeSessionsRepository from '../repositories/fakes/FakeSessionsRepository';
-import FakeUserHashProvider from '../containers/providers/UserHashProvider/fakes/FakeUserHashProvider';
+import UserHashProvider from '../containers/providers/UserHashProvider/implementations/UserHashProvider';
 import ForgotPasswordService from './ForgotPasswordService';
 import { UserStatus } from '../entities/User';
 
-let userHashProvider: FakeUserHashProvider;
+let hashProvider: FakeHashProvider;
+let userHashProvider: UserHashProvider;
 let mailProvider: FakeMailProvider;
 let usersRepository: FakeUsersRepository;
 let sessionsRepository: FakeSessionsRepository;
@@ -14,7 +16,8 @@ let forgotPassword: ForgotPasswordService;
 
 describe('ForgotPassword', () => {
   beforeEach(() => {
-    userHashProvider = new FakeUserHashProvider();
+    hashProvider = new FakeHashProvider();
+    userHashProvider = new UserHashProvider(hashProvider);
     mailProvider = new FakeMailProvider();
     usersRepository = new FakeUsersRepository();
     sessionsRepository = new FakeSessionsRepository();
