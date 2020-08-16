@@ -4,4 +4,8 @@ export default class ForgotPasswordSession {
   userId: string;
 
   validationDate: Date;
+
+  created_at?: Date;
+
+  updated_at?: Date;
 }

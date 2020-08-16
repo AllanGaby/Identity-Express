@@ -17,4 +17,8 @@ export default class User {
   extentionAvatar?: string;
 
   status: UserStatus;
+
+  created_at?: Date;
+
+  updated_at?: Date;
 }
