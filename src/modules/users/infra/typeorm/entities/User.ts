@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { UserStatus } from '@modules/users/entities/User';
 
 @Entity('users')
@@ -39,4 +39,12 @@ export default class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Expose({ name: 'avatar' })
+  getAvatar(): string | null {
+    if (this.extentionAvatar) {
+      return `http://localhost:3333/users/${this.id}`;
+    }
+    return null;
+  }
 }

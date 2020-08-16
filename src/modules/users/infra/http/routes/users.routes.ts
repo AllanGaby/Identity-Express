@@ -2,6 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import UploadConfig from '@config/upload';
 import PasswordRoutes from './password.routes';
+import AvatarUserRoutes from './avatar.routes';
 import UsersController from '../controllers/UsersController';
 import ActivateController from '../controllers/ActivateController';
 import EnsureAutenticated from '../middleware/EnsureAutenticated';
@@ -12,6 +13,7 @@ const usersController = new UsersController();
 const activateController = new ActivateController();
 
 usersRoutes.use('/password', PasswordRoutes);
+usersRoutes.use('/', AvatarUserRoutes);
 usersRoutes.get('/', EnsureAutenticated, usersController.list);
 usersRoutes.get('/:id', EnsureAutenticated, usersController.show);
 usersRoutes.post('/', uploadFile.single('avatar'), usersController.create);
