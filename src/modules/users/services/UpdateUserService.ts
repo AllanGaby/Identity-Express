@@ -105,6 +105,8 @@ export default class UpdateUserService {
           templateFilePath,
           variables: {
             name: nameToUpdate,
+            old_mail: email,
+            new_mail: emailToUpdate,
           },
         },
       });

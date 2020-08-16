@@ -1,7 +1,7 @@
 import { container } from 'tsyringe';
 import IUserHashProvider from './providers/UserHashProvider/models/IUserHashProvider';
-import FakeUserHashProvider from './providers/UserHashProvider/fakes/FakeUserHashProvider';
 import ITokenProvider from './providers/TokenProvider/models/ITokenProvider';
+import UserHashProvider from './providers/UserHashProvider/implementations/UserHashProvider';
 import FakeTokenProvider from './providers/TokenProvider/fakes/FakeTokenProvider';
 import IUsersRepository from '../repositories/models/IUsersRepository';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
@@ -10,7 +10,7 @@ import FakeForgotPasswordSessionsRepository from '../repositories/fakes/FakeSess
 
 container.registerSingleton<IUserHashProvider>(
   'UserHashProvider',
-  FakeUserHashProvider,
+  UserHashProvider,
 );
 container.registerSingleton<ITokenProvider>('TokenProvider', FakeTokenProvider);
 container.registerSingleton<IUsersRepository>(

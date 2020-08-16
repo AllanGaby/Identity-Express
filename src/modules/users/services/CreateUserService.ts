@@ -80,7 +80,7 @@ export default class CreateUserService {
         templateFilePath,
         variables: {
           name,
-          link: 'Link para ativar a conta',
+          link: `${user.id}`,
         },
       },
     });

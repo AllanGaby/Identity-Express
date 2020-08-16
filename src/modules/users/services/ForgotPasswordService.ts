@@ -47,7 +47,7 @@ export default class ForgotPasswordService {
     const validationDate = new Date();
     validationDate.setHours(validationDate.getHours() + 2);
 
-    await this.forgotPasswordSessionsRepository.create({
+    const session = await this.forgotPasswordSessionsRepository.create({
       userId: userByEmail.id,
       validationDate,
     });
@@ -68,7 +68,7 @@ export default class ForgotPasswordService {
         templateFilePath,
         variables: {
           name,
-          link: 'Link para recuperar a senha',
+          link: `${session.id}`,
         },
       },
     });
