@@ -59,9 +59,6 @@ export default class AuthenticateUserService {
       subject: userByEmail.id,
     });
 
-    delete userByEmail.password;
-    delete userByEmail.hash;
-    delete userByEmail.extentionAvatar;
     return {
       token,
       user: userByEmail,

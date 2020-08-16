@@ -51,9 +51,6 @@ export default class CreateUserService {
       status: newStatus,
       hash: newHash,
     });
-    delete user.password;
-    delete user.hash;
-    delete user.extentionAvatar;
     return user;
   }
 }

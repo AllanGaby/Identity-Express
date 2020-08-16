@@ -29,8 +29,6 @@ describe('ShowUser', () => {
     expect(user?.email).toEqual(newUser.email);
     expect(user).toHaveProperty('id');
     expect(user?.id).toEqual(newUser.id);
-    expect(user).not.toHaveProperty('hash');
-    expect(user).not.toHaveProperty('password');
   });
 
   it('should not be able non-exists user', async () => {

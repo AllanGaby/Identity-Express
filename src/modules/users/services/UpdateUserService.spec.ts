@@ -57,8 +57,6 @@ describe('UpdateUser', () => {
     expect(user.name).toEqual(name);
     expect(user).toHaveProperty('email');
     expect(user.email).toEqual(createdUser.email);
-    expect(user).not.toHaveProperty('password');
-    expect(user).not.toHaveProperty('hash');
     expect(onSendMail).not.toHaveBeenCalled();
   });
 
@@ -78,8 +76,6 @@ describe('UpdateUser', () => {
     expect(user.name).toEqual(createdUser.name);
     expect(user).toHaveProperty('email');
     expect(user.email).toEqual(email);
-    expect(user).not.toHaveProperty('password');
-    expect(user).not.toHaveProperty('hash');
     expect(onSendMail).toHaveBeenCalledTimes(1);
   });
 
@@ -98,8 +94,6 @@ describe('UpdateUser', () => {
     expect(user.name).toEqual(createdUser.name);
     expect(user).toHaveProperty('email');
     expect(user.email).toEqual(createdUser.email);
-    expect(user).not.toHaveProperty('password');
-    expect(user).not.toHaveProperty('hash');
     expect(onSendMail).not.toHaveBeenCalled();
   });
 
@@ -127,8 +121,6 @@ describe('UpdateUser', () => {
     expect(user.name).toEqual(createdUser.name);
     expect(user).toHaveProperty('email');
     expect(user.email).toEqual(createdUser.email);
-    expect(user).not.toHaveProperty('password');
-    expect(user).not.toHaveProperty('hash');
     expect(onSendMail).not.toHaveBeenCalled();
     expect(onFileExists).toHaveBeenCalled();
     expect(onDeleteFile).toHaveBeenCalled();
@@ -158,8 +150,6 @@ describe('UpdateUser', () => {
     expect(user.name).toEqual(createdUser.name);
     expect(user).toHaveProperty('email');
     expect(user.email).toEqual(createdUser.email);
-    expect(user).not.toHaveProperty('password');
-    expect(user).not.toHaveProperty('hash');
     expect(onSendMail).not.toHaveBeenCalled();
     expect(onFileExists).toHaveBeenCalled();
     expect(onDeleteFile).not.toHaveBeenCalled();

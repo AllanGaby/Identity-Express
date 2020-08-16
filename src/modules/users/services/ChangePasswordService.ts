@@ -70,9 +70,6 @@ export default class ChangePasswordService {
       hash: newHash,
       status,
     });
-    delete updatedUser.password;
-    delete updatedUser.hash;
-    delete updatedUser.extentionAvatar;
     return updatedUser;
   }
 }

@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import AuthenticateUserService from '@modules/users/services/AuthenticateUserService';
+import { classToClass } from 'class-transformer';
 
 export default class LoginController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -11,6 +12,6 @@ export default class LoginController {
       email,
       password,
     });
-    return response.json(authenticate);
+    return response.json(classToClass(authenticate));
   }
 }

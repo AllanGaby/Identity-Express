@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import ChangePasswordService from '@modules/users/services/ChangePasswordService';
+import { classToClass } from 'class-transformer';
 
 export default class PasswordController {
   public async update(request: Request, response: Response): Promise<Response> {
@@ -12,6 +13,6 @@ export default class PasswordController {
       token,
       password,
     });
-    return response.json(user);
+    return response.json(classToClass(user));
   }
 }

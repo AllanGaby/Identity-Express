@@ -47,8 +47,6 @@ describe('CreateUser', () => {
     expect(user.email).toEqual(email);
     expect(user).toHaveProperty('status');
     expect(user.status).toEqual(UserStatus.Created);
-    expect(user).not.toHaveProperty('password');
-    expect(user).not.toHaveProperty('hash');
     expect(onSendMail).toHaveBeenCalledTimes(1);
   });
 
@@ -72,8 +70,6 @@ describe('CreateUser', () => {
     expect(user.email).toEqual(email);
     expect(user).toHaveProperty('status');
     expect(user.status).toEqual(UserStatus.Created);
-    expect(user).not.toHaveProperty('password');
-    expect(user).not.toHaveProperty('hash');
     expect(onSendMail).toHaveBeenCalledTimes(1);
     expect(onSaveFile).toHaveBeenCalledWith({
       sourceFilePath,

@@ -5,6 +5,7 @@ import CreateUserService from '@modules/users/services/CreateUserService';
 import UpdateUserService from '@modules/users/services/UpdateUserService';
 import ListUsersService from '@modules/users/services/ListUsersService';
 import ShowUserService from '@modules/users/services/ShowUserService';
+import { classToClass } from 'class-transformer';
 
 export default class UsersController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -20,7 +21,7 @@ export default class UsersController {
       password,
       temporaryAvatarPath,
     });
-    return response.status(201).json(user);
+    return response.status(201).json(classToClass(user));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
@@ -38,14 +39,14 @@ export default class UsersController {
       password,
       temporaryAvatarPath,
     });
-    return response.json(user);
+    return response.json(classToClass(user));
   }
 
   public async list(request: Request, response: Response): Promise<Response> {
     const listUsers = container.resolve(ListUsersService);
     const users = await listUsers.execute();
     if (users) {
-      return response.json(users);
+      return response.json(classToClass(users));
     }
     return response.status(404);
   }
@@ -57,7 +58,7 @@ export default class UsersController {
       userId: id,
     });
     if (user) {
-      return response.json(user);
+      return response.json(classToClass(user));
     }
 
     return response.status(404);

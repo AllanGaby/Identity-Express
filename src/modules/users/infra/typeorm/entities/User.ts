@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { UserStatus } from '@modules/users/entities/User';
 
 @Entity('users')
@@ -19,12 +20,15 @@ export default class User {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column()
+  @Exclude()
   hash: string;
 
   @Column({ name: 'extention_avatar' })
+  @Exclude()
   extentionAvatar?: string;
 
   @Column('enum', { name: 'status', enum: 'UserStatus' })

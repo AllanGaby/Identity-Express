@@ -132,10 +132,6 @@ export default class UpdateUserService {
         destinationFile,
       });
     }
-
-    delete user.password;
-    delete user.hash;
-    delete user.extentionAvatar;
     return user;
   }
 }

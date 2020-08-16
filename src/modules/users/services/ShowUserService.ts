@@ -13,9 +13,6 @@ export default class ListUsersService {
 
   public async execute({ userId }: IShowUserDTO): Promise<User | undefined> {
     const user = await this.usersRepository.findById(userId);
-    delete user?.hash;
-    delete user?.password;
-    delete user?.extentionAvatar;
     return user;
   }
 }
