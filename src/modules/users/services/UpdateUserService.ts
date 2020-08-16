@@ -52,12 +52,10 @@ export default class UpdateUserService {
         throw new AppError(`There is a user with the e-mail ${newEmail}`);
       }
     }
-    const emailToUpdate = newEmail || email;
-    const nameToUpdate = newName || name;
     const isUserHashValid = await this.userHashProvider.compareHash(
       {
-        name: nameToUpdate,
-        email: emailToUpdate,
+        name,
+        email,
         password,
         status,
       },
@@ -66,7 +64,8 @@ export default class UpdateUserService {
     if (!isUserHashValid) {
       throw new AppError('User is currupted');
     }
-
+    const emailToUpdate = newEmail || email;
+    const nameToUpdate = newName || name;
     let passwordHash;
     if (newPassword) {
       passwordHash = await this.hashProvider.generateHash(newPassword);

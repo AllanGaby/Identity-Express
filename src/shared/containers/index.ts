@@ -7,6 +7,7 @@ import IMailTemplateProvider from './providers/MailProvider/MailTemplateProvider
 import FakeMailTemplateProvider from './providers/MailProvider/MailTemplateProvider/fakes/FakeMailTemplateProvider';
 import IStorageProvider from './providers/StorageProvider/models/IStorageProvider';
 import FakeStorageProvider from './providers/StorageProvider/fakes/FakeStorageProvider';
+import '@modules/users/containers';
 
 container.registerSingleton<IHashProvider>('HashProvider', FakeHashProvider);
 container.registerSingleton<IMailProvider>('MailProvider', FakeMailProvider);

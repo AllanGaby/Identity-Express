@@ -2,14 +2,13 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import 'express-async-errors';
 import AppError from '@shared/errors/AppError';
-import UsersModuleRoutes from '@modules/users/infra/http/routes';
+import AppRoutes from './routes';
 import '@shared/containers';
-import '@modules/users/containers';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(UsersModuleRoutes);
+app.use(AppRoutes);
 app.use(
   (err: Error, request: Request, response: Response, next: NextFunction) => {
     console.log(err);

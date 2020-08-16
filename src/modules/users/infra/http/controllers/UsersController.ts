@@ -1,34 +1,21 @@
+import 'reflect-metadata';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import CreateUserService from '@modules/users/services/CreateUserService';
 import UpdateUserService from '@modules/users/services/UpdateUserService';
 import ListUsersService from '@modules/users/services/ListUsersService';
 import ShowUserService from '@modules/users/services/ShowUserService';
-import ActivateUserService from '@modules/users/services/ActivateUserService';
 
 export default class UsersController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const createUser = container.resolve(CreateUserService);
     const { name, email, password } = request.body;
-    console.log(request.body);
+    const createUser = container.resolve(CreateUserService);
     const user = await createUser.execute({
       name,
       email,
       password,
     });
     return response.status(201).json(user);
-  }
-
-  public async activate(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
-    const activateUser = container.resolve(ActivateUserService);
-    const { id } = request.params;
-    const user = await activateUser.execute({
-      id,
-    });
-    return response.json(user);
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
