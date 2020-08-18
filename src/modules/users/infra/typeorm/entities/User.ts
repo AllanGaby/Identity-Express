@@ -43,7 +43,7 @@ export default class User {
   @Expose({ name: 'avatar' })
   getAvatar(): string | null {
     if (this.extentionAvatar) {
-      return `http://localhost:3333/users/${this.id}`;
+      return `http://localhost:3333/users/${this.id}/avatar`;
     }
     return null;
   }
