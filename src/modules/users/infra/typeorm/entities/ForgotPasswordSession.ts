@@ -14,7 +14,7 @@ export default class ForgotPasswordSession {
   @Column({ name: 'user_id' })
   userId: string;
 
-  @Column('timestamp with time zone')
+  @Column('timestamp with time zone', { name: 'validation_date' })
   validationDate: Date;
 
   @CreateDateColumn()
