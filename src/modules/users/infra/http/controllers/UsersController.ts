@@ -10,16 +10,16 @@ import { classToClass } from 'class-transformer';
 export default class UsersController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { name, email, password } = request.body;
-    let temporaryAvatarPath = '';
+    let avatarFile = '';
     if (request.file) {
-      temporaryAvatarPath = request.file.filename;
+      avatarFile = request.file.filename;
     }
     const createUser = container.resolve(CreateUserService);
     const user = await createUser.execute({
       name,
       email,
       password,
-      temporaryAvatarPath,
+      avatarFile,
     });
     return response.status(201).json(classToClass(user));
   }
@@ -28,16 +28,16 @@ export default class UsersController {
     const updateUser = container.resolve(UpdateUserService);
     const { name, email, password } = request.body;
     const { id } = request.params;
-    let temporaryAvatarPath = '';
+    let avatarFile = '';
     if (request.file) {
-      temporaryAvatarPath = request.file.filename;
+      avatarFile = request.file.filename;
     }
     const user = await updateUser.execute({
       id,
       name,
       email,
       password,
-      temporaryAvatarPath,
+      avatarFile,
     });
     return response.json(classToClass(user));
   }
