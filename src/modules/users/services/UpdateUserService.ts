@@ -5,6 +5,7 @@ import IHashProvider from '@shared/containers/providers/HashProvider/models/IHas
 import IMailProvider from '@shared/containers/providers/MailProvider/models/IMailProvider';
 import IStorageProvider from '@shared/containers/providers/StorageProvider/models/IStorageProvider';
 import path from 'path';
+import ICacheProvider from '@shared/containers/providers/CacheProvider/models/ICacheProvider';
 import IUserHashProvider from '../containers/providers/UserHashProvider/models/IUserHashProvider';
 import User from '../entities/User';
 import IUpdateUserDTO from '../dtos/IUpdateUserDTO';
@@ -21,6 +22,8 @@ export default class UpdateUserService {
     private mailProvider: IMailProvider,
     @inject('StorageProvider')
     private storageProvider: IStorageProvider,
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
   ) {}
@@ -129,6 +132,7 @@ export default class UpdateUserService {
         destinationFile,
       });
     }
+    await this.cacheProvider.invalidate(`users:${user.id}`);
     return user;
   }
 }

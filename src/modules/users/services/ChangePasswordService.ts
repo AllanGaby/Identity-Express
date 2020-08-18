@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { injectable, inject } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
 import IHashProvider from '@shared/containers/providers/HashProvider/models/IHashProvider';
+import ICacheProvider from '@shared/containers/providers/CacheProvider/models/ICacheProvider';
 import IChangePasswordDTO from '../dtos/IChangePasswordDTO';
 import IForgotPasswordSessionsRepository from '../repositories/models/IForgotPasswordSessionsRepository';
 import IUsersRepository from '../repositories/models/IUsersRepository';
@@ -15,6 +16,8 @@ export default class ChangePasswordService {
     private userHashProvider: IUserHashProvider,
     @inject('HashProvider')
     private hashProvider: IHashProvider,
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
     @inject('ForgotPasswordSessionsRepository')
@@ -70,6 +73,7 @@ export default class ChangePasswordService {
       hash: newHash,
       status,
     });
+    await this.cacheProvider.invalidate(`users:${updatedUser.id}`);
     return updatedUser;
   }
 }

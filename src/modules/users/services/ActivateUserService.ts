@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { inject, injectable } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
+import ICacheProvider from '@shared/containers/providers/CacheProvider/models/ICacheProvider';
 import IUserHashProvider from '../containers/providers/UserHashProvider/models/IUserHashProvider';
 import User, { UserStatus } from '../entities/User';
 import IActivateUserDTO from '../dtos/IActivateUserDTO';
@@ -11,6 +12,8 @@ export default class CreateUserService {
   constructor(
     @inject('UserHashProvider')
     private userHashProvider: IUserHashProvider,
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
   ) {}
@@ -51,6 +54,7 @@ export default class CreateUserService {
       status: newStatus,
       hash: newHash,
     });
+    await this.cacheProvider.invalidate(`users:${user.id}`);
     return user;
   }
 }

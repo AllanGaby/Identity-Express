@@ -1,5 +1,6 @@
 import AppError from '@shared/errors/AppError';
 import FakeHashProvider from '@shared/containers/providers/HashProvider/fakes/FakeHashProvider';
+import FakeCacheProvider from '@shared/containers/providers/CacheProvider/fakes/FakeCacheProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import FakeSessionsRepository from '../repositories/fakes/FakeSessionsRepository';
 import UserHashProvider from '../containers/providers/UserHashProvider/implementations/UserHashProvider';
@@ -9,6 +10,7 @@ import Session from '../entities/ForgotPasswordSession';
 
 let userHashProvider: UserHashProvider;
 let hashProvider: FakeHashProvider;
+let cacheProvider: FakeCacheProvider;
 let usersRepository: FakeUsersRepository;
 let sessionsRepository: FakeSessionsRepository;
 let changePassword: ChangePasswordService;
@@ -20,11 +22,13 @@ describe('ChangePassword', () => {
   beforeEach(async () => {
     hashProvider = new FakeHashProvider();
     userHashProvider = new UserHashProvider(hashProvider);
+    cacheProvider = new FakeCacheProvider();
     usersRepository = new FakeUsersRepository();
     sessionsRepository = new FakeSessionsRepository();
     changePassword = new ChangePasswordService(
       userHashProvider,
       hashProvider,
+      cacheProvider,
       usersRepository,
       sessionsRepository,
     );

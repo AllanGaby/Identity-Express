@@ -2,8 +2,7 @@ import AppError from '@shared/errors/AppError';
 import FakeHashProvider from '@shared/containers/providers/HashProvider/fakes/FakeHashProvider';
 import FakeMailProvider from '@shared/containers/providers/MailProvider/fakes/FakeMailProvider';
 import FakeStorageProvider from '@shared/containers/providers/StorageProvider/fakes/FakeStorageProvider';
-import path from 'path';
-import uploadConfig from '@config/upload';
+import FakeCacheProvider from '@shared/containers/providers/CacheProvider/fakes/FakeCacheProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import UserHashProvider from '../containers/providers/UserHashProvider/implementations/UserHashProvider';
 import UpdateUserService from './UpdateUserService';
@@ -13,6 +12,7 @@ let userHashProvider: UserHashProvider;
 let mailProvider: FakeMailProvider;
 let hashProvider: FakeHashProvider;
 let storageProvider: FakeStorageProvider;
+let cacheProvider: FakeCacheProvider;
 let usersRepository: FakeUsersRepository;
 let updateUser: UpdateUserService;
 let createdUser: User;
@@ -23,12 +23,14 @@ describe('UpdateUser', () => {
     userHashProvider = new UserHashProvider(hashProvider);
     mailProvider = new FakeMailProvider();
     storageProvider = new FakeStorageProvider();
+    cacheProvider = new FakeCacheProvider();
     usersRepository = new FakeUsersRepository();
     updateUser = new UpdateUserService(
       userHashProvider,
       hashProvider,
       mailProvider,
       storageProvider,
+      cacheProvider,
       usersRepository,
     );
     createdUser = await usersRepository.create({
