@@ -1,4 +1,4 @@
 export default interface ISaveFileDTO {
-  sourceFilePath: string;
+  sourceFile: string;
   destinationFile: string;
 }

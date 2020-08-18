@@ -5,8 +5,6 @@ import IHashProvider from '@shared/containers/providers/HashProvider/models/IHas
 import IMailProvider from '@shared/containers/providers/MailProvider/models/IMailProvider';
 import IStorageProvider from '@shared/containers/providers/StorageProvider/models/IStorageProvider';
 import path from 'path';
-import fs from 'fs';
-import uploadConfig from '@config/upload';
 import IUserHashProvider from '../containers/providers/UserHashProvider/models/IUserHashProvider';
 import User from '../entities/User';
 import IUpdateUserDTO from '../dtos/IUpdateUserDTO';
@@ -32,7 +30,7 @@ export default class UpdateUserService {
     name: newName,
     email: newEmail,
     password: newPassword,
-    temporaryAvatarPath,
+    avatarFile,
   }: IUpdateUserDTO): Promise<User> {
     const userById = await this.usersRepository.findById(id);
     if (!userById) {
@@ -79,9 +77,7 @@ export default class UpdateUserService {
       status,
       password: passwordHash,
     });
-    const extentionAvatar = temporaryAvatarPath
-      ? path.extname(temporaryAvatarPath)
-      : undefined;
+    const extentionAvatar = avatarFile ? path.extname(avatarFile) : undefined;
     const user = await this.usersRepository.update({
       id,
       name: nameToUpdate,
@@ -117,18 +113,19 @@ export default class UpdateUserService {
       });
     }
 
-    if (temporaryAvatarPath) {
-      const sourceFilePath = path.resolve(
-        uploadConfig.temporaryDir,
-        temporaryAvatarPath,
-      );
+    if (avatarFile) {
       const destinationFile = `${user.id}${user.extentionAvatar}`;
-      const fileExists = await this.storageProvider.fileExists(destinationFile);
+      const destinationFilePath = await this.storageProvider.filePath(
+        destinationFile,
+      );
+      const fileExists = await this.storageProvider.fileExists(
+        destinationFilePath,
+      );
       if (fileExists) {
-        await this.storageProvider.deleteFile(destinationFile);
+        await this.storageProvider.deleteFile(destinationFilePath);
       }
       await this.storageProvider.saveFile({
-        sourceFilePath,
+        sourceFile: avatarFile,
         destinationFile,
       });
     }

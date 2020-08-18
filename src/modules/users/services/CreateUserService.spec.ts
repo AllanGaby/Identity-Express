@@ -60,10 +60,8 @@ describe('CreateUser', () => {
       name,
       email,
       password: '123456',
-      temporaryAvatarPath: avatarFile,
+      avatarFile,
     });
-    const sourceFilePath = path.resolve(uploadConfig.temporaryDir, avatarFile);
-
     expect(user).toHaveProperty('name');
     expect(user.name).toEqual(name);
     expect(user).toHaveProperty('email');
@@ -72,7 +70,7 @@ describe('CreateUser', () => {
     expect(user.status).toEqual(UserStatus.Created);
     expect(onSendMail).toHaveBeenCalledTimes(1);
     expect(onSaveFile).toHaveBeenCalledWith({
-      sourceFilePath,
+      sourceFile: avatarFile,
       destinationFile: `${user.id}.jpg`,
     });
   });

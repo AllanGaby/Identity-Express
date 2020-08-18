@@ -1,4 +1,3 @@
-import fs from 'fs';
 import AppError from '@shared/errors/AppError';
 import FakeHashProvider from '@shared/containers/providers/HashProvider/fakes/FakeHashProvider';
 import FakeMailProvider from '@shared/containers/providers/MailProvider/fakes/FakeMailProvider';
@@ -110,13 +109,12 @@ describe('UpdateUser', () => {
     const avatarFile = 'New File.jpg';
     await storageProvider.saveFile({
       destinationFile: `${createdUser.id}.jpg`,
-      sourceFilePath: `${createdUser.id}.jpg`,
+      sourceFile: `${createdUser.id}.jpg`,
     });
     const user = await updateUser.execute({
       id: createdUser.id,
-      temporaryAvatarPath: avatarFile,
+      avatarFile,
     });
-    const sourceFilePath = path.resolve(uploadConfig.temporaryDir, avatarFile);
     expect(user).toHaveProperty('name');
     expect(user.name).toEqual(createdUser.name);
     expect(user).toHaveProperty('email');
@@ -125,7 +123,7 @@ describe('UpdateUser', () => {
     expect(onFileExists).toHaveBeenCalled();
     expect(onDeleteFile).toHaveBeenCalled();
     expect(onSaveFile).toHaveBeenCalledWith({
-      sourceFilePath,
+      sourceFile: avatarFile,
       destinationFile: `${user.id}.jpg`,
     });
   });
@@ -143,9 +141,8 @@ describe('UpdateUser', () => {
     const avatarFile = 'New File.jpg';
     const user = await updateUser.execute({
       id: createdUser.id,
-      temporaryAvatarPath: avatarFile,
+      avatarFile,
     });
-    const sourceFilePath = path.resolve(uploadConfig.temporaryDir, avatarFile);
     expect(user).toHaveProperty('name');
     expect(user.name).toEqual(createdUser.name);
     expect(user).toHaveProperty('email');
@@ -154,7 +151,7 @@ describe('UpdateUser', () => {
     expect(onFileExists).toHaveBeenCalled();
     expect(onDeleteFile).not.toHaveBeenCalled();
     expect(onSaveFile).toHaveBeenCalledWith({
-      sourceFilePath,
+      sourceFile: avatarFile,
       destinationFile: `${user.id}.jpg`,
     });
   });
