@@ -4,7 +4,11 @@ import EtherealMailProvider from './implementations/EtherealMailProvider';
 
 import './MailTemplateProvider';
 
+const providers = {
+  ethreal: EtherealMailProvider,
+};
+
 container.registerInstance<IMailProvider>(
   'MailProvider',
-  container.resolve(EtherealMailProvider),
+  container.resolve(providers.ethreal),
 );
