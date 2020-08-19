@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { inject, injectable } from 'tsyringe';
 import ICacheProvider from '@shared/containers/providers/CacheProvider/models/ICacheProvider';
+import { classToClass } from 'class-transformer';
 import IUsersRepository from '../repositories/models/IUsersRepository';
 import User from '../entities/User';
 import IShowUserDTO from '../dtos/IShowUserDTO';
@@ -19,11 +20,10 @@ export default class ListUsersService {
     let user = await this.cacheProvider.recover<User>(cacheUserKey);
     if (!user) {
       user = await this.usersRepository.findById(userId);
-
       if (user) {
         await this.cacheProvider.save({
           key: cacheUserKey,
-          value: user,
+          value: classToClass(user),
         });
       }
     }

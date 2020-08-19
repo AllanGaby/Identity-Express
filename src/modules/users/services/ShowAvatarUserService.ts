@@ -4,6 +4,7 @@ import AppError from '@shared/errors/AppError';
 import path from 'path';
 import uploadConfig from '@config/upload';
 import ICacheProvider from '@shared/containers/providers/CacheProvider/models/ICacheProvider';
+import { classToClass } from 'class-transformer';
 import IShowAvatarDTO from '../dtos/IShowAvatarDTO';
 import IUsersRepository from '../repositories/models/IUsersRepository';
 import User from '../entities/User';
@@ -27,7 +28,7 @@ export default class CreateUserService {
       }
       await this.cacheProvider.save({
         key: cacheUserKey,
-        value: user,
+        value: classToClass(user),
       });
     }
     const { extentionAvatar } = user;
